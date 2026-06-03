@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+.venv/
+.env
+venv/
+
+trace.json
+learning_log.json
+
+.DS_Store

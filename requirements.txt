@@ -1,0 +1,9 @@
+langgraph
+langchain
+langchain-core
+langchain-groq
+pymupdf
+pydantic
+python-dotenv
+pandas
+pytesseract pillow
