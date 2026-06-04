@@ -10,5 +10,21 @@
     {
         "iteration": 3,
         "reward": 1.0
+    },
+    {
+        "iteration": 4,
+        "reward": 1.0
+    },
+    {
+        "iteration": 5,
+        "reward": 1.0
+    },
+    {
+        "iteration": 6,
+        "reward": 1.0
+    },
+    {
+        "iteration": 7,
+        "reward": 1.0
     }
 ]
