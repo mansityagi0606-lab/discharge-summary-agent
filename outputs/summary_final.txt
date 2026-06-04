@@ -1,0 +1,45 @@
+===== DISCHARGE SUMMARY DRAFT =====
+
+Diagnoses:
+- ACUTE GASTROENTERITIS WITH DEHYDRATION
+  Evidence: 1) ACUTE GASTROENTERITIS WITH DEHYDRATION
+- URINARY TRACT INFECTION
+  Evidence: 2) URINARY TRACT INFECTION
+
+Discharge Medications:
+- RACIPER 40MG
+  Frequency: 1-0-0
+  Duration: 7 DAYS
+  Evidence: | | TAB. RACIPER 40MG | 1-0-0 7 DAYS
+- MEDICATION_REQUIRES_REVIEW
+  Frequency: Not documented
+  Duration: 3 DAYS
+  Evidence: TAB, EMESET 3 DAYS
+- M STRONG J 1
+  Frequency: 1-0-0
+  Duration: Not documented
+  Evidence: = TAB M STRONG J 1-0-0 IS DAYS
+- ENTR
+  Frequency: Not documented
+  Duration: 3 DAYS
+  Evidence: TAB. ENTR¢ ‘10 -] 3 DAYS
+- MEFTAL SPAS ITABSOS
+  Frequency: Not documented
+  Duration: Not documented
+  Evidence: Zz TAB. MEFTAL SPAS ITABSOS | 4TABLETS
+
+Pending Results:
+- Urine culture and sensitivity report awaited
+- One or more reports pending
+
+Medication Reconciliation:
+- REVIEW REQUIRED: History indicates thyroid treatment but no thyroid medication identified in discharge medications.
+
+Conflicts:
+- Multiple diagnosis sections found. Clinician review required.
+
+Missing Fields:
+- None
+
+Safety Flags:
+- None
