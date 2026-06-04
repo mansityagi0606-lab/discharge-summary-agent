@@ -1,91 +1,75 @@
-AI Discharge Summary Agent (Clinical Document Intelligence System)
+AI Discharge Summary Agent (LLM + Tool-Using Clinical Assistant)
 
-An autonomous AI agent that reads clinical discharge PDFs (via OCR text) and generates a structured, evidence-grounded discharge summary using a multi-step reasoning loop with tool-based extraction, safety checks, and a self-improving learning mechanism.
+An AI-powered agent that processes noisy OCR discharge summaries and generates structured, traceable, and clinically safe draft reports.
+The system simulates a real-world clinical documentation assistant with tool-based reasoning, iterative planning, and a learning loop from reviewer feedback.
 
-Key Highlights
-Agentic workflow (planner + re-plan loop)
-OCR-based medical document ingestion
-Structured extraction (diagnosis + medications)
-Medication reconciliation engine
-Conflict + safety detection system
-Evidence-grounded outputs (no hallucination policy)
-Traceable execution logs (audit-ready)
-Learning loop using correction feedback + reward scoring
-
+Key Features:
+Agentic reasoning loop (plan → act → re-plan)
+PDF/OCR ingestion pipeline
+Structured extraction of diagnoses & medications
+Medication reconciliation (admission vs discharge)
+Conflict detection + safety flagging
+Drug interaction checks (mock tool-based safety layer)
+Hard no-fabrication guardrail (critical design constraint)
+Trace logging for every decision step
+Learning loop using simulated reviewer feedback (Part 2)
 System Architecture
-OCR Text Input
-      ↓
-Agent Planner (decides next step)
-      ↓
-Tool Execution Layer
- ├── Diagnosis Extractor
- ├── Medication Extractor
- ├── Structured Medication Parser
- ├── Reconciliation Engine
- ├── Conflict Checker
- ├── Drug Interaction Checker
-      ↓
-State Manager (AgentState)
-      ↓
-Safety + Validation Layer
-      ↓
-Summary Generator
-      ↓
-Trace Logger + Learning System
 
-How It Works
-The system operates as a controlled reasoning agent loop:
-Reads raw OCR discharge text
-Planner decides next action dynamically
-Executes tools (extraction / validation / reconciliation)
-Updates shared agent state
-Re-plans until completion or step limit reached
-Generates final structured discharge summary
-Logs every step for auditability
+The system is built around a stateful agent loop:
+OCR Text → Agent State → Planner → Tool Selection → State Update → Repeat → Summary Generation
+Agent Loop Design
+At each iteration:
+Planner analyzes current AgentState
+Chooses next action:
+extract_diagnosis
+extract_medications
+reconcile_medications
+generate_summary
+finish
+Tool executes and updates state
+Trace is logged
+Agent re-plans until completion or step limit
 
-Core Features
-1. PDF / OCR Ingestion
-Processes raw OCR-extracted discharge summaries
-Robust section parsing (Diagnosis, Medications, Follow-up, etc.)
+This ensures the system is not a fixed pipeline, but a dynamic reasoning loop.
 
-2. Structured Medical Extraction
-Extracts:
-Diagnoses
-Medications
-Frequency & duration
-Preserves evidence mapping for every extracted field
+No Fabrication Guardrail (Core Safety Feature):
 
-3. Medication Reconciliation
-Compares:
+The agent is strictly designed to never hallucinate clinical information.
+
+Enforcement Strategy:
+Only extracted values from OCR are used
+Missing fields are explicitly marked:
+"MISSING (Clinician Review Required)"
+Pending labs are explicitly preserved
+Conflicts are flagged instead of resolved
+No “best guess” filling is allowed anywhere in pipeline
+If data is not present in the document → it is never invented.
+
+onflict & Safety Handling:
+The system detects and escalates:
+Duplicate or inconsistent diagnoses
+Missing medication mapping
+History vs discharge medication mismatch
+Drug interaction risks (mock interaction tool)
+
+
+Medication Reconciliation:
+The system compares:
 Admission medications
 Discharge medications
 
-Detects:
+It detects:
 Added medications
 Stopped medications
 Unexplained changes
 
-4. Clinical Safety Layer
-Automatically flags:
-Conflicting diagnoses
-Missing clinical information
-Drug interactions (rule-based mock tool)
-History–discharge mismatches
+If no admission data exists, reconciliation is safely skipped.
 
-5. Agentic Planning Loop
-
-Instead of a fixed pipeline, the system uses a planner:
-
-Decides next action dynamically
-Supports re-planning based on intermediate results
-Prevents premature completion
-
-6. Observability & Traceability
-
-Every step is logged:
+Traceability (Observability Layer):
+Every step is logged in a structured trace:
 
 {
-  "reasoning": "Need diagnosis extraction",
+  "reasoning": "...",
   "tool": "DiagnosisExtractor",
   "input": "raw_text",
   "result": "...",
@@ -94,39 +78,60 @@ Every step is logged:
 
 This ensures:
 
-Full audit trail
-Debuggable AI decisions
+Full auditability
+Debugging support
 Clinical transparency
 
-7. Learning System (Feedback Loop)
+Part 2: Learning from Reviewer Feedback
+Since real clinician edits are unavailable, a simulated reviewer is used.
 
-The system simulates clinician review:
-Generates correction signals (simulated doctor edits)
-Computes reward score based on edit distance
-Stores correction memory
-Improves future outputs using feedback
+Approach
+Agent generates draft summary
+Simulated reviewer applies hidden edit policy
+Produces (draft → edited) pair
+System computes:
+Reward Signal
+Edit distance between draft and corrected version
+Section-level similarity score
+Learning Objective
 
-Goal: reduce human editing burden over time
+The system improves by:
+Reducing unnecessary edits
+Increasing structural correctness
+Maintaining clinical fidelity (NOT verbosity reduction)
+Output Metrics
+Example:
+Reward Score: 0.98 → 1.0
+Average Reward tracked over runs
+Learning curve stored in learning_metrics.json
 
-Example Output
-===== DISCHARGE SUMMARY DRAFT =====
 
-Diagnoses:
-- ACUTE GASTROENTERITIS WITH DEHYDRATION
-- URINARY TRACT INFECTION
+How to Run:
+1. Install dependencies
+   pip install -r requirements.txt
+2. Run Agent
+   python main.py
+3. Outputs generated in:
+   /outputs
+  ├── trace.json
+  ├── summary_final.txt
+  ├── learning_metrics.json
 
-Discharge Medications:
-- RACIPER 40MG (1-0-0, 7 DAYS)
-- EMESET (3 DAYS)
+Project Structure:
+app/
+ ├── agents/
+ ├── tools/
+ ├── utils/
+ ├── learning/
+main.py
+ocr_output.txt
+outputs/
 
-Pending Results:
-- Urine culture report awaited
-
-Medication Reconciliation:
-- REVIEW REQUIRED: Missing thyroid medication in discharge list
-
-Conflicts:
-- Multiple diagnosis sections detected
-
-Safety Flags:
-- None
+Summary:
+This project demonstrates a production-style AI agent system with:
+Tool-based reasoning loop
+Clinical safety constraints
+Structured extraction pipeline
+Traceable decision-making
+Self-improving learning simulation
+It is designed as a safe, auditable, and extensible clinical AI assistant prototype.
